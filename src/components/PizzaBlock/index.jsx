@@ -1,6 +1,6 @@
 import React from "react";
 
-function PizzBlock({ title, price, imgUrl, sizes, types }) {
+function PizzBlock({ name, price, imageUrl, sizes, types }) {
   const [activeType, setActiveType] = React.useState(0);
   const [activeSize, setActiveSize] = React.useState(0);
   const [pizzaCount, setPizzaCount] = React.useState(0);
@@ -13,8 +13,8 @@ function PizzBlock({ title, price, imgUrl, sizes, types }) {
   return (
     <div className="pizza-block-wrapper">
       <div className="pizza-block">
-        <img className="pizza-block__image" src={imgUrl} alt="Pizza" />
-        <h4 className="pizza-block__title">{title}</h4>
+        <img className="pizza-block__image" src={imageUrl} alt="Pizza" />
+        <h4 className="pizza-block__title">{name}</h4>
         <div className="pizza-block__selector">
           <ul>
             {types.map((type) => (
