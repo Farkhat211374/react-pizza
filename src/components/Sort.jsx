@@ -1,32 +1,42 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setSortBy } from "../redux/slices/filterSlice";
 
-function Sort({ value, onChangeSort }) {
-  const [isVissible, setIsVissible] = React.useState(false);
-  const sortTypes = [
-    {
-      name: "популярности по возрастанию",
-      sortType: "rating",
-      orderType: "asc",
-    },
-    {
-      name: "популярности по уменьшению",
-      sortType: "rating",
-      orderType: "desc",
-    },
-    { name: "цене (сначала дешевые)", sortType: "price", orderType: "asc" },
-    { name: "цене (сначала дорогие)", sortType: "price", orderType: "desc" },
-    { name: "алфавиту (asc)", sortType: "title", orderType: "asc" },
-    { name: "алфавиту (desc)", sortType: "title", orderType: "desc" },
-  ];
+export const sortTypes = [
+  {
+    name: "популярности по возрастанию",
+    sortType: "rating",
+    orderType: "asc",
+  },
+  {
+    name: "популярности по уменьшению",
+    sortType: "rating",
+    orderType: "desc",
+  },
+  { name: "цене (сначала дешевые)", sortType: "price", orderType: "asc" },
+  { name: "цене (сначала дорогие)", sortType: "price", orderType: "desc" },
+  { name: "алфавиту (asc)", sortType: "title", orderType: "asc" },
+  { name: "алфавиту (desc)", sortType: "title", orderType: "desc" },
+];
 
-  const setSortType = (i) => {
-    onChangeSort(i);
-    setIsVissible(false);
+function Sort() {
+  const sortObject = useSelector((state) => state.filter.sort);
+  const dispatch = useDispatch();
+
+  const onChangeSort = (obj) => {
+    dispatch(setSortBy(obj));
+  };
+
+  const [isVisible, setIsVisible] = React.useState(false);
+
+  const setSortType = (obj) => {
+    onChangeSort(obj);
+    setIsVisible(false);
   };
 
   return (
     <div className="sort">
-      <div onClick={() => setIsVissible(!isVissible)} className="sort__label">
+      <div onClick={() => setIsVisible(!isVisible)} className="sort__label">
         <svg
           width="10"
           height="6"
@@ -40,16 +50,16 @@ function Sort({ value, onChangeSort }) {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span>{value.name}</span>
+        <span>{sortObject.name}</span>
       </div>
-      {isVissible && (
+      {isVisible && (
         <div className="sort__popup">
           <ul>
             {sortTypes.map((obj, i) => (
               <li
                 key={i}
                 onClick={() => setSortType(obj)}
-                className={value.name === obj.name ? "active" : ""}
+                className={sortObject.name === obj.name ? "active" : ""}
               >
                 {obj.name}
               </li>

@@ -11,6 +11,7 @@
   border-radius: 100px;
   font-size: 16px;
 
+  transition: width 0.2s ease, border-color 0.2s ease;
   &:focus {
     border: 1px solid rgba(0, 0, 0, 0.3);
     width: 450px;

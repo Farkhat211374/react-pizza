@@ -10,7 +10,6 @@ export const AppContext = React.createContext("");
 
 function App() {
   const [searchValue, setSearchValue] = React.useState("");
-  const [pageIndex, setPageIndex] = React.useState(1);
 
   return (
     <div className="wrapper">
@@ -18,8 +17,6 @@ function App() {
         value={{
           searchValue,
           setSearchValue,
-          pageIndex,
-          setPageIndex,
         }}
       >
         <Header />
