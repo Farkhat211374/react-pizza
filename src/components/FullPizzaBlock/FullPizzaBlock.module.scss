@@ -1,0 +1,38 @@
+.container {
+  display: flex;
+  align-items: center;
+  padding: 50px 100px;
+
+  .pizza_photo {
+    flex-shrink: 0;
+    margin-right: 20px;
+
+    img {
+      width: 584;
+      height: 584;
+      object-fit: cover;
+    }
+  }
+
+  .pizza_info {
+    padding: 30px;
+    flex-grow: 1;
+    h2 {
+      margin: 0 0 10px 0;
+      font-size: 1.8rem;
+      color: #333;
+    }
+
+    p {
+      margin: 0 0 10px 0;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    h4 {
+      margin: 20px;
+      font-size: 2rem;
+      color: #e67e22;
+    }
+  }
+}

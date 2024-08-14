@@ -4,38 +4,34 @@ import PizzaBlock from "../components/PizzaBlock";
 import Sort, { sortTypes } from "../components/Sort";
 import { Skeleton } from "../components/PizzaBlock/Skeleton";
 import Pagination from "../components/Pagination";
-import { AppContext } from "../App";
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
 import qs from "qs";
-import { useNavigate } from "react-router-dom";
-import { setFilters } from "../redux/slices/filterSlice";
+import { Link, useNavigate } from "react-router-dom";
+import { setFilters, getFilterSelector } from "../redux/slices/filterSlice";
+import { fetchAllPizzas, getPizzaSelector } from "../redux/slices/pizzaSlice";
 
 const Home = () => {
-  const [items, setItems] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(true);
   const isSearch = React.useRef(false);
   const isMounted = React.useRef(false);
-  const { searchValue } = React.useContext(AppContext);
-  const { categoryId, sort, currentPage } = useSelector(
-    (state) => state.filter
-  );
+  const { categoryId, sort, currentPage, searchValue } =
+    useSelector(getFilterSelector);
+  const { items, status } = useSelector(getPizzaSelector);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const getPizzas = () => {
-    setIsLoading(true);
+  const getPizzas = async () => {
     const category = `${categoryId > 0 ? `category=${categoryId}` : ""}`;
     const searchBy = `${searchValue ? `&search=${searchValue}` : ""}`;
 
-    axios
-      .get(
-        `https://66b345027fba54a5b7ec3747.mockapi.io/items?${category}&sortBy=${sort.sortType}&order=${sort.orderType}&page=${currentPage}&limit=4${searchBy}`
-      )
-      .then((res) => {
-        setItems(res.data);
-        setIsLoading(false);
-      });
+    dispatch(
+      fetchAllPizzas({
+        category,
+        searchBy,
+        sort,
+        currentPage,
+      })
+    );
   };
 
   React.useEffect(() => {
@@ -87,11 +83,27 @@ const Home = () => {
         <Sort />
       </div>
       <h2 className="content__title">Все пиццы</h2>
-      <div className="content__items">
-        {isLoading
-          ? [...new Array(12)].map((_, index) => <Skeleton key={index} />)
-          : items.map((obj) => <PizzaBlock key={obj.id} {...obj} />)}
-      </div>
+      {status === "failed" ? (
+        <div className="content__error-info">
+          <h2>
+            Произошла ошибка <span>😕</span>
+          </h2>
+          <p>
+            К сожалению, не удалось получить данные с сервера. Попробуйте
+            повторить попытку позже.
+          </p>
+        </div>
+      ) : (
+        <div className="content__items">
+          {status === "loading"
+            ? [...new Array(12)].map((_, index) => <Skeleton key={index} />)
+            : items.map((obj) => (
+                <Link key={obj.id} to={`pizza/${obj.id}`}>
+                  <PizzaBlock {...obj} />
+                </Link>
+              ))}
+        </div>
+      )}
       <Pagination />
     </div>
   );

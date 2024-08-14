@@ -1,13 +1,16 @@
 .LoadBox {
-  height: 100%;
-  width: 100%;
+  background-color: #ffdf8c;
+  height: 100vh;
+  width: 100vw;
   margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: absolute;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
 }
-/* HTML: <div class="loader"></div> */
 .loader {
   width: 130px;
   aspect-ratio: 1;
