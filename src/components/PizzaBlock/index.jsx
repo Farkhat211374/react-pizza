@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {addItem, selectCartItemById} from "../../redux/slices/cartSlice";
 import {Link} from "react-router-dom";
 
-function PizzBlock({id, name, price, imageUrl, sizes, types}) {
+function PizzaBlock({id, name, price, imageUrl, sizes, types}) {
     const [activeType, setActiveType] = React.useState(0);
     const [activeSize, setActiveSize] = React.useState(0);
     const cartItem = useSelector(selectCartItemById(id));
@@ -71,4 +71,4 @@ function PizzBlock({id, name, price, imageUrl, sizes, types}) {
         </div>);
 }
 
-export default PizzBlock;
+export default PizzaBlock;
