@@ -4,8 +4,8 @@ import { setSortBy, getFilterSelector } from "../redux/slices/filterSlice";
 
 type SortTypesItem = {
   name: string;
-  sortType: string;
-  orderType: string;
+  sortType: "rating" | "price" | "title";
+  orderType: "asc" | "desc";
 }
 
 type PopupClick = MouseEvent & {

@@ -18,11 +18,22 @@ const FullPizzaBlock: React.FC = () => {
 
     const addedCount = cartItem ? cartItem.count : 0;
     const onClickAdd = () => {
-        dispatch(addItem(item));
+        dispatch(addItem({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            imageUrl: item.imageUrl,
+            type: typesName[activeType],
+            size: item.sizes[activeSize],
+            count: 1
+        }));
     };
 
     React.useEffect(() => {
-        dispatch(fetchPizza({id: id}));
+        const numericId: number = Number(id)
+        if (!isNaN(numericId)) {
+            dispatch(fetchPizza({id: numericId}));
+        }
     }, [dispatch, id]);
 
     if (status === "loading" || !item) {

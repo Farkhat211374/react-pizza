@@ -43,7 +43,7 @@ export const fetchAllPizzas = createAsyncThunk<PizzaItem[], FilterSliceState>("p
     return data;
 });
 
-export const fetchPizza = createAsyncThunk<PizzaItem, Record<string, string>>("pizza/fetchPizzaStatus", async (params) => {
+export const fetchPizza = createAsyncThunk<PizzaItem, Record<string, number>>("pizza/fetchPizzaStatus", async (params) => {
     const {id} = params;
     const {data} = await axios.get<PizzaItem>(`https://66b345027fba54a5b7ec3747.mockapi.io/items/${id}`);
 

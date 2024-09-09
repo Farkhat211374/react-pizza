@@ -7,7 +7,7 @@ import Pagination from "../components/Pagination";
 import {useSelector} from "react-redux";
 import qs from "qs";
 import {useNavigate} from "react-router-dom";
-import {getFilterSelector, setFilters} from "../redux/slices/filterSlice";
+import {SortItem, FilterSliceState, getFilterSelector, setFilters} from "../redux/slices/filterSlice";
 import {fetchAllPizzas, getPizzaSelector} from "../redux/slices/pizzaSlice";
 import {useAppDispatch} from "../redux/store";
 
@@ -39,11 +39,20 @@ const Home: React.FC = () => {
 
     React.useEffect(() => {
         if (window.location.search) {
-            const params = qs.parse(window.location.search.substring(1));
-            const sort = sortTypes.find((obj) => obj.sortType === params.sortProperty && obj.orderType === params.orderBy);
-            if(sort) {
-                params.sort = sort
+            const query = qs.parse(window.location.search.substring(1));
+            const sort: SortItem = sortTypes.find((obj) => obj.sortType === query.sortProperty && obj.orderType === query.orderBy) || sortTypes[0];
+
+            const params: FilterSliceState = {
+                searchValue: '',
+                categoryId: Number(query.categoryId),
+                currentPage: Number(query.currentPage),
+                sort: {
+                    name: sort.name,
+                    sortType: sort.sortType,
+                    orderType: sort.orderType,
+                }
             }
+
             dispatch(setFilters(params));
             isSearch.current = true;
         }
@@ -52,7 +61,7 @@ const Home: React.FC = () => {
     React.useEffect(() => {
         window.scrollTo(0, 0);
         if (!isSearch.current) {
-            getPizzas();
+            getPizzas()
         }
 
         isSearch.current = false;
