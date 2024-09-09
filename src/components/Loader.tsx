@@ -1,6 +1,7 @@
 import "../scss/loader.scss";
+import React from "react";
 
-function Loader() {
+const Loader: React.FC = () => {
   return (
     <div className="LoadBox">
       <div className="loader"></div>

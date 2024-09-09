@@ -2,7 +2,7 @@ import React from "react";
 import ContentLoader from "react-content-loader";
 import styles from "./FullPizzaBlock.module.scss";
 
-export const Skeleton = () => (
+export const Skeleton: React.FC = () => (
   <div className={styles.container}>
     <ContentLoader
       speed={2}

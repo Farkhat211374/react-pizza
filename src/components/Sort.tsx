@@ -2,7 +2,17 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setSortBy, getFilterSelector } from "../redux/slices/filterSlice";
 
-export const sortTypes = [
+type SortTypesItem = {
+  name: string;
+  sortType: string;
+  orderType: string;
+}
+
+type PopupClick = MouseEvent & {
+  path: Node[];
+};
+
+export const sortTypes: SortTypesItem[] = [
   {
     name: "популярности по возрастанию",
     sortType: "rating",
@@ -19,34 +29,34 @@ export const sortTypes = [
   { name: "алфавиту (desc)", sortType: "title", orderType: "desc" },
 ];
 
-function Sort() {
+const Sort: React.FC = () => {
   const sortObject = useSelector(getFilterSelector).sort;
   const dispatch = useDispatch();
-  const sortRef = React.useRef();
+  const sortRef = React.useRef<HTMLDivElement>(null);
 
-  const onChangeSort = (obj) => {
+  const onChangeSort = (obj: SortTypesItem) => {
     dispatch(setSortBy(obj));
   };
 
   const [isVisible, setIsVisible] = React.useState(false);
 
-  const setSortType = (obj) => {
+  const setSortType = (obj: SortTypesItem) => {
     onChangeSort(obj);
     setIsVisible(false);
   };
 
   React.useEffect(() => {
-    const handleClickOutside = (event) => {
-      const path = event.composedPath ? event.composedPath() : event.path;
-      if (path && !path.includes(sortRef.current)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      const _event = event as PopupClick;
+      const path = _event.composedPath ? _event.composedPath() : _event.path;
+      if (sortRef.current && !path.includes(sortRef.current)) {
         setIsVisible(false);
       }
     };
 
-    document.body.addEventListener("click", handleClickOutside);
-    return () => {
-      document.body.removeEventListener("click", handleClickOutside);
-    };
+    document.body.addEventListener('click', handleClickOutside);
+
+    return () => document.body.removeEventListener('click', handleClickOutside);
   }, []);
 
   return (

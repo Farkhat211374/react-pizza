@@ -2,12 +2,12 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setCategoryId, getFilterSelector } from "../redux/slices/filterSlice";
 
-function Categories() {
+const Categories: React.FC = () => {
   const categoryIndex = useSelector(getFilterSelector).categoryId;
 
   const dispatch = useDispatch();
 
-  const onChangeCategory = (id) => {
+  const onChangeCategory = (id: number): void => {
     dispatch(setCategoryId(id));
   };
 

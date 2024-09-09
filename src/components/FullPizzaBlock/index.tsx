@@ -1,20 +1,20 @@
 import React from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
 import {fetchPizza, getPizzaSelector} from "../../redux/slices/pizzaSlice";
 import styles from "./FullPizzaBlock.module.scss";
 import {addItem, selectCartItemById} from "../../redux/slices/cartSlice";
 import {Skeleton} from "./Skeleton";
-import qs from "qs";
+import {useAppDispatch} from "../../redux/store";
 
 const FullPizzaBlock: React.FC = () => {
-    const [activeType, setActiveType] = React.useState(0);
-    const [activeSize, setActiveSize] = React.useState(0);
+    const [activeType, setActiveType] = React.useState<number>(0);
+    const [activeSize, setActiveSize] = React.useState<number>(0);
     const typesName = ["тонкое", "традиционное"];
     const {id} = useParams<{ id: string }>();
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const {item, status} = useSelector(getPizzaSelector);
-    const cartItem = useSelector(selectCartItemById(id));
+    const cartItem = useSelector(selectCartItemById(Number(id)));
 
     const addedCount = cartItem ? cartItem.count : 0;
     const onClickAdd = () => {
@@ -22,8 +22,7 @@ const FullPizzaBlock: React.FC = () => {
     };
 
     React.useEffect(() => {
-        console.log('started')
-        dispatch(fetchPizza({id}));
+        dispatch(fetchPizza({id: id}));
     }, [dispatch, id]);
 
     if (status === "loading" || !item) {
@@ -50,7 +49,7 @@ const FullPizzaBlock: React.FC = () => {
                     </li>))}
                 </ul>
                 <ul>
-                    {item.sizes.map((size: string, i: number) => (<li
+                    {item.sizes.map((size: number, i: number) => (<li
                         key={size}
                         className={activeSize === i ? "active" : ""}
                         onClick={() => setActiveSize(i)}
