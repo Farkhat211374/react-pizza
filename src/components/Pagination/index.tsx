@@ -2,10 +2,11 @@ import React from "react";
 import ResponsivePagination from "react-responsive-pagination";
 import styles from "./Pagination.module.scss";
 import { useSelector, useDispatch } from "react-redux";
-import {setCurrentPage, getFilterSelector} from "../../redux/slices/filterSlice";
+import {setCurrentPage} from "../../redux/filter/slice";
+import {selectFilter} from "../../redux/filter/selectors"
 
 const Pagination: React.FC = () => {
-  const currentPage = useSelector(getFilterSelector).currentPage;
+  const currentPage = useSelector(selectFilter).currentPage;
   const dispatch = useDispatch();
   const onChangePage = (number: number) => {
     dispatch(setCurrentPage(number));

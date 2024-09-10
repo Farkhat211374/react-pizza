@@ -1,15 +1,16 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { setCategoryId, getFilterSelector } from "../redux/slices/filterSlice";
+import { useDispatch } from "react-redux";
+import { setCategoryId } from "../redux/filter/slice";
 
-const Categories: React.FC = () => {
-  const categoryIndex = useSelector(getFilterSelector).categoryId;
+type CategoriesProps = {
+  value: number;
+}
 
+const Categories: React.FC<CategoriesProps> = React.memo(({value}) => {
   const dispatch = useDispatch();
-
-  const onChangeCategory = (id: number): void => {
+  const onChangeCategory = React.useCallback((id: number) => {
     dispatch(setCategoryId(id));
-  };
+  }, []);
 
   const categories = [
     "Все",
@@ -22,20 +23,20 @@ const Categories: React.FC = () => {
   ];
 
   return (
-    <div className="categories">
-      <ul>
-        {categories.map((categoryName, i) => (
-          <li
-            key={i}
-            onClick={() => onChangeCategory(i)}
-            className={Number(categoryIndex) === i ? "active" : ""}
-          >
-            {categoryName}
-          </li>
-        ))}
-      </ul>
-    </div>
+      <div className="categories">
+        <ul>
+          {categories.map((categoryName, i) => (
+              <li
+                  key={i}
+                  onClick={() => onChangeCategory(i)}
+                  className={Number(value) === i ? "active" : ""}
+              >
+                {categoryName}
+              </li>
+          ))}
+        </ul>
+      </div>
   );
-}
+});
 
 export default Categories;

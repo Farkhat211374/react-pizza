@@ -7,15 +7,19 @@ import Pagination from "../components/Pagination";
 import {useSelector} from "react-redux";
 import qs from "qs";
 import {useNavigate} from "react-router-dom";
-import {SortItem, FilterSliceState, getFilterSelector, setFilters} from "../redux/slices/filterSlice";
-import {fetchAllPizzas, getPizzaSelector} from "../redux/slices/pizzaSlice";
+import { selectFilter } from '../redux/filter/selectors';
+import { selectPizzaData } from '../redux/pizza/selectors';
+import { setCategoryId, setCurrentPage, setFilters } from '../redux/filter/slice';
+import {fetchAllPizzas} from '../redux/pizza/asyncActions';
+import { SearchPizzaParams } from '../redux/pizza/types';
 import {useAppDispatch} from "../redux/store";
+import {FilterSliceState, SortItem} from "../redux/filter/types";
 
 const Home: React.FC = () => {
     const isSearch = React.useRef<boolean>(false);
     const isMounted = React.useRef<boolean>(false);
-    const {categoryId, sort, currentPage, searchValue} = useSelector(getFilterSelector);
-    const {items, status} = useSelector(getPizzaSelector);
+    const {categoryId, sort, currentPage, searchValue} = useSelector(selectFilter);
+    const {items, status} = useSelector(selectPizzaData);
 
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
@@ -30,7 +34,7 @@ const Home: React.FC = () => {
     React.useEffect(() => {
         if (isMounted.current) {
             const queryString = qs.stringify({
-                categoryId: categoryId, sortProperty: sort.sortType, orderBy: sort.orderType, currentPage: currentPage,
+                categoryId: categoryId, sortProperty: sort.sortType, orderBy: sort.orderType, currentPage: currentPage, search: searchValue
             });
             navigate(`?${queryString}`);
         }
@@ -43,7 +47,7 @@ const Home: React.FC = () => {
             const sort: SortItem = sortTypes.find((obj) => obj.sortType === query.sortProperty && obj.orderType === query.orderBy) || sortTypes[0];
 
             const params: FilterSliceState = {
-                searchValue: '',
+                searchValue: String(query.search),
                 categoryId: Number(query.categoryId),
                 currentPage: Number(query.currentPage),
                 sort: {
@@ -69,11 +73,11 @@ const Home: React.FC = () => {
 
     return (<div className="container">
         <div className="content__top">
-            <Categories/>
-            <Sort/>
+            <Categories value={categoryId} />
+            <Sort value={sort} />
         </div>
         <h2 className="content__title">Все пиццы</h2>
-        {status === "failed" ? (<div className="content__error-info">
+        {status === "error" ? (<div className="content__error-info">
             <h2>
                 Произошла ошибка <span>😕</span>
             </h2>

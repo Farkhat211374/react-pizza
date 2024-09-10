@@ -1,9 +1,11 @@
 import React from "react";
 import {useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
-import {fetchPizza, getPizzaSelector} from "../../redux/slices/pizzaSlice";
+import {fetchPizza} from "../../redux/pizza/asyncActions";
+import {selectPizzaData} from "../../redux/pizza/selectors";
 import styles from "./FullPizzaBlock.module.scss";
-import {addItem, selectCartItemById} from "../../redux/slices/cartSlice";
+import {addItem, } from "../../redux/cart/slice";
+import {selectCartItemById} from "../../redux/cart/selectors"
 import {Skeleton} from "./Skeleton";
 import {useAppDispatch} from "../../redux/store";
 
@@ -13,7 +15,7 @@ const FullPizzaBlock: React.FC = () => {
     const typesName = ["тонкое", "традиционное"];
     const {id} = useParams<{ id: string }>();
     const dispatch = useAppDispatch();
-    const {item, status} = useSelector(getPizzaSelector);
+    const {item, status} = useSelector(selectPizzaData);
     const cartItem = useSelector(selectCartItemById(Number(id)));
 
     const addedCount = cartItem ? cartItem.count : 0;
