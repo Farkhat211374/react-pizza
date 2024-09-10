@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {setCurrentPage} from "../../redux/filter/slice";
 import {selectFilter} from "../../redux/filter/selectors"
 
-const Pagination: React.FC = () => {
+export const Pagination: React.FC = () => {
   const currentPage = useSelector(selectFilter).currentPage;
   const dispatch = useDispatch();
   const onChangePage = (number: number) => {
@@ -22,4 +22,3 @@ const Pagination: React.FC = () => {
   );
 };
 
-export default Pagination;
